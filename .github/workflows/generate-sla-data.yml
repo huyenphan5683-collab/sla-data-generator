@@ -1,0 +1,32 @@
+name: Generate SLA Dataset
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run generator
+        run: |
+          python generate_sla_data.py
+
+      - name: Upload output files
+        uses: actions/upload-artifact@v4
+        with:
+          name: sla-generated-files
+          path: output/*.xlsx
